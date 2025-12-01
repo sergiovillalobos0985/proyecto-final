@@ -10,45 +10,59 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     
-                    <div class="mb-6">
-                        <h3 class="text-lg font-bold text-gray-700">Descripción</h3>
-                        <p class="mt-2">{{ $event->description }}</p>
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div>
+                            <h3 class="text-lg font-bold text-indigo-600 mb-2">Sobre el evento</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">{{ $event->description }}</p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-700">Detalles</h3>
-                            <ul class="list-disc list-inside mt-2">
-                                <li><strong>Fecha:</strong> {{ $event->start_date }}</li>
-                                <li><strong>Lugar:</strong> {{ $event->location }}</li>
-                                <li><strong>Categoría:</strong> {{ $event->category->name }}</li>
-                                <li><strong>Organizador:</strong> {{ $event->user->name }}</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-700">Etiquetas</h3>
-                            <div class="mt-2">
-                                @foreach($event->tags as $tag)
-                                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2" style="background-color: {{ $tag->color }}33;">
-                                        #{{ $tag->name }}
-                                    </span>
-                                @endforeach
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <ul class="space-y-2 text-sm">
+                                    <li><strong>📅 Fecha:</strong> {{ $event->start_date }}</li>
+                                    <li><strong>📍 Ubicación:</strong> {{ $event->location }}</li>
+                                    <li><strong>📂 Categoría:</strong> {{ $event->category->name }}</li>
+                                    <li><strong>👤 Organizador:</strong> {{ $event->user->name }}</li>
+                                </ul>
                             </div>
                         </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-indigo-600 mb-2">Etiquetas</h3>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                @forelse($event->tags as $tag)
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">
+                                        #{{ $tag->name }}
+                                    </span>
+                                @empty
+                                    <span class="text-gray-500 italic text-sm">Sin etiquetas</span>
+                                @endforelse
+                            </div>
+
+                            @if(auth()->id() === $event->user_id || auth()->user()->role === 'admin')
+                                <div class="border-t pt-4 mt-4">
+                                    <h4 class="text-sm font-semibold mb-2">Acciones de Administrador</h4>
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('events.edit', $event) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+                                            Editar
+                                        </a>
+                                        
+                                        <form action="{{ route('events.destroy', $event) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres borrar este evento?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                                                Borrar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
-                    <div class="border-t pt-4">
-                        <a href="{{ route('events.index') }}" class="text-blue-500 hover:text-blue-700">← Volver al listado</a>
-                        
-                        @if(auth()->id() === $event->user_id)
-                            <a href="{{ route('events.edit', $event) }}" class="ml-4 text-yellow-500 hover:text-yellow-700">Editar</a>
-                            
-                            <form action="{{ route('events.destroy', $event) }}" method="POST" class="inline ml-4">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700" onclick="return confirm('¿Borrar evento?')">Borrar</button>
-                            </form>
-                        @endif
+                    <div class="mt-8">
+                        <a href="{{ route('events.index') }}" class="text-indigo-600 hover:text-indigo-800 underline">
+                            &larr; Volver al listado
+                        </a>
                     </div>
 
                 </div>

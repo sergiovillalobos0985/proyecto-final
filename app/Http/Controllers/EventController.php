@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\Event;
 
 class EventController extends Controller
 {
@@ -40,7 +41,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. VALIDACIÓN (Lado Servidor - 70 Puntos)
+        
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -51,17 +52,12 @@ class EventController extends Controller
             'tags.*' => 'exists:tags,id', // Cada tag seleccionado debe existir
         ]);
 
-        // 2. CREACIÓN
-        // Usamos la relación del usuario para asignar automáticamente el user_id
-        // $request->user() obtiene el usuario logueado actualmente
         $event = $request->user()->events()->create($validated);
 
-        // 3. GUARDAR RELACIÓN M:N (Etiquetas)
         if ($request->has('tags')) {
             $event->tags()->sync($request->tags);
         }
 
-        // 4. REDIRECCIÓN
         return redirect()->route('events.index')
                          ->with('status', '¡Evento creado con éxito!');
     }
@@ -80,15 +76,22 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        // 1. Necesitamos las categorías y etiquetas para llenar los selects y checkboxes
         $categories = \App\Models\Category::all();
         $tags = \App\Models\Tag::all();
         
-        // 2. Retornamos la vista enviando el evento a editar y las opciones
         return view('events.edit', compact('event', 'categories', 'tags'));
+        
+        if (request()->user()->cannot('delete', $event)) {
+            abort(403, 'No tienes permiso para eliminar este evento.');
+        }
+
+        $event->delete();
+
+        return redirect()->route('events.index')
+                         ->with('status', 'Evento eliminado correctamente.');
+        $categories = Category::all();
     }
 
-    // GUARDA LOS CAMBIOS EN LA BASE DE DATOS
     public function update(Request $request, Event $event)
     {
         // 1. VALIDACIÓN (Igual que en create, pero ajustamos reglas si es necesario)
@@ -125,10 +128,14 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        // Autenticación básica: (Mejoraremos esto con Policies en el siguiente paso)
-        if ($event->user_id !== auth()->id()) {
-            abort(403, 'No tienes permiso para borrar este evento.');
+        if (request()->user()->cannot('delete', $event)) {
+            abort(403, 'No tienes permiso para eliminar este evento.');
         }
+
+        $event->delete();
+
+        return redirect()->route('events.index')
+                         ->with('status', 'Evento eliminado correctamente.');
 
         $event->delete(); // Esto hace un Soft Delete gracias al modelo
 
