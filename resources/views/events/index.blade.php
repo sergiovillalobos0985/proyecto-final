@@ -20,19 +20,19 @@
                     <table class="min-w-full leading-normal">
                         <thead>
                             <tr>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                     Evento
                                 </th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                     Categoría
                                 </th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                     Fecha
                                 </th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                     Autor
                                 </th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                     Acciones
                                 </th>
                             </tr>
@@ -65,16 +65,16 @@
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                     <p class="text-gray-900 whitespace-no-wrap">{{ $event->user->name }}</p>
                                 </td>
-                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <a href="{{ route('events.show', $event) }}" class="text-blue-600 hover:text-blue-900 mr-2">Ver</a>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-black text-sm">
+                                    <a href="{{ route('events.show', $event) }}" class="text-blue-700 hover:text-blue-900 mr-2">Ver</a>
                                     
                                     @if(auth()->id() === $event->user_id || auth()->user()->role === 'admin')
-                                        <a href="{{ route('events.edit', $event) }}" class="text-yellow-600 hover:text-yellow-900 mr-2">Editar</a>
+                                        <a href="{{ route('events.edit', $event) }}" class="text-yellow-700 hover:text-yellow-900 mr-2">Editar</a>
                                         
                                         <form action="{{ route('events.destroy', $event) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('¿Seguro?')">Borrar</button>
+                                            <button type="submit" class="text-red-700 hover:text-red-900" onclick="return confirm('¿Seguro?')">Borrar</button>
                                         </form>
                                     @endif
                                 </td>

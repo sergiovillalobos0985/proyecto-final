@@ -15,14 +15,14 @@
                         @method('PUT') <div class="mb-4">
                             <label for="title" class="block text-sm font-medium text-gray-700">Título del Evento</label>
                             <input type="text" name="title" id="title" value="{{ old('title', $event->title) }}" 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                   class="text-blue-700 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                             @error('title') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
                             <textarea name="description" id="description" rows="3" 
-                                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('description', $event->description) }}</textarea>
+                                      class="text-blue-700 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('description', $event->description) }}</textarea>
                             @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
@@ -30,20 +30,20 @@
                             <label for="start_date" class="block text-sm font-medium text-gray-700">Fecha y Hora</label>
                             <input type="datetime-local" name="start_date" id="start_date" 
                                    value="{{ old('start_date', $event->start_date) }}" 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                   class="text-blue-700 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                             @error('start_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="location" class="block text-sm font-medium text-gray-700">Ubicación</label>
                             <input type="text" name="location" id="location" value="{{ old('location', $event->location) }}" 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                   class="text-blue-700 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                             @error('location') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="category_id" class="block text-sm font-medium text-gray-700">Categoría</label>
-                            <select name="category_id" id="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <select name="category_id" id="category_id" class=" text-blue-700 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" 
                                         {{ (old('category_id', $event->category_id) == $category->id) ? 'selected' : '' }}>
@@ -59,7 +59,7 @@
                                 @foreach($tags as $tag)
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="tags[]" value="{{ $tag->id }}" 
-                                               class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                               class="rounded border-gray-300 text-blue-700 shadow-sm focus:ring-indigo-500"
                                                {{ $event->tags->contains($tag->id) ? 'checked' : '' }}> <span class="ml-2 text-sm text-gray-600">{{ $tag->name }}</span>
                                     </label>
                                 @endforeach

@@ -29,7 +29,6 @@ class EventController extends Controller
      */
     public function create()
     {
-        // Necesitamos enviar las categorías y etiquetas a la vista para el <select>
         $categories = Category::all();
         $tags = Tag::all();
         
@@ -94,7 +93,6 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
-        // 1. VALIDACIÓN (Igual que en create, pero ajustamos reglas si es necesario)
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -105,12 +103,8 @@ class EventController extends Controller
             'tags.*' => 'exists:tags,id', // Verifica que cada tag exista
         ]);
 
-        // 2. ACTUALIZAR DATOS BÁSICOS
         $event->update($validated);
 
-        // 3. ACTUALIZAR RELACIÓN M:N (Etiquetas)
-        // El método sync() es muy potente: 
-        // Agrega las nuevas, borra las que quitaste y mantiene las que dejaste.
         if ($request->has('tags')) {
             $event->tags()->sync($request->tags);
         } else {
